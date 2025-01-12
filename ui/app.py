@@ -24,17 +24,17 @@ if st.button("Generate"):
         print(latex)
     else:
         image_bytes = img_utils.uploaded_img_to_img_bytes(uploaded_files)
-        #latex = service.generate_mock_exam_from_images(curr_llm_model, image_bytes, n_questions, mood)
+        latex = service.generate_mock_exam_from_images(curr_llm_model, image_bytes, n_questions, mood)
+        print(latex)
 
-    # pdf_file_location = latex_utils.tex_to_pdf(latex, st.session_state.get("pdflatex_location"))
-    # # Open PDF file and load it to memory
-    # with open(pdf_file_location, "rb") as f:
-    #     pdf_bytes = f.read()
-    #     # Close the file
-    #     f.close()
-    #
-    # st.download_button(
-    #     label="Download PDF",
-    #     data=pdf_bytes,
-    #     file_name="mock_exam.pdf",
-    #     mime="application/pdf")
+    pdf_bytes = latex_utils.latex_to_pdf(latex)
+
+    # If pdf_bytes is not None then add download button to Streamlit page, display an error message otherwise
+    if pdf_bytes is not None:
+        st.download_button(
+            label="Download PDF",
+            data=pdf_bytes,
+            file_name="mock_exam.pdf",
+            mime="application/pdf")
+    else:
+        st.error("An error occurred while generating the PDF. Please try again.")

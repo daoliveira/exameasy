@@ -49,12 +49,12 @@ def uploaded_img_to_text(uploaded_files, lang):
         if width * height > OCR_MAX_IMG_SIZE:
             scaling_factor = (OCR_MAX_IMG_SIZE / (width * height)) ** 0.5
             # Resize image using scaling_factor
-            image_small = image.resize((int(width * scaling_factor), int(height * scaling_factor)))
-            # Convert the smaller image to an in-memory file (BytesIO)
-            byte_stream = BytesIO()
-            image_small.save(byte_stream, format='JPEG')
-            byte_stream.seek(0)
-            image = byte_stream.getvalue()
+            image = image.resize((int(width * scaling_factor), int(height * scaling_factor)))
+        # Convert image to an in-memory file (BytesIO)
+        byte_stream = BytesIO()
+        image.save(byte_stream, format='JPEG')
+        byte_stream.seek(0)
+        image = byte_stream.getvalue()
         # Extract text using EasyOCR
         result = reader.readtext(image)
         # Extract text from result

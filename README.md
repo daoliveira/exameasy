@@ -22,7 +22,7 @@ need for an efficient, affordable, and user-friendly tool to automate exam creat
 
 ## Requirements
 
-- pdflatex
+- a working LaTeX distribution (e.g., TeX Live, MiKTeX) installed and the pdflatex executable in your system's PATH
 - deepseek or OpenAI API key
 
 ## Installation
@@ -36,7 +36,6 @@ Create your .env file with the content below
 ```text
 OPENAI_API_KEY=<if you're using OpenAI models>
 DEEPSEEK_API_KEY=<if you're using DeepSeek models>
-PDFLATEX_LOCATION=
 ```
 
 ## Usage
