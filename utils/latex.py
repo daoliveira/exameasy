@@ -22,19 +22,19 @@ def latex_to_pdf(tex):
     try:
         # Use a temporary directory to avoid cluttering the current directory
         with tempfile.TemporaryDirectory("tmp") as temp_dir:
-            # Write the LaTeX content to a temporary file
-            with open(tex_file, 'w') as f:
-                f.write(tex)
-
             # Get path to temp LaTeX file
             temp_latex_filepath = os.path.join(temp_dir, tex_file)
+
+            # Write the LaTeX content to a temporary file
+            with open(temp_latex_filepath, 'w') as f:
+                f.write(tex)
 
             result = subprocess.run(
                 [
                     "pdflatex",
                     "-interaction=nonstopmode",
                     f"-output-directory={temp_dir}",
-                    tex_file,
+                    temp_latex_filepath,
                 ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
