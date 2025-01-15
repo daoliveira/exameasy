@@ -16,6 +16,3 @@ def init_session():
 
     if "deepseek_api_key" not in st.session_state:
         st.session_state.deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
-
-    if "pdflatex_location" not in st.session_state:
-        st.session_state.pdflatex_location = os.getenv("PDFLATEX_LOCATION")

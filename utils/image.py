@@ -35,10 +35,11 @@ def uploaded_img_to_img_bytes(uploaded_files):
     return img_bytes
 
 
-def uploaded_img_to_text(uploaded_files, lang):
+def uploaded_img_to_text(st_status, uploaded_files, lang = "en"):
     text = ""
     reader = easyocr.Reader([lang])
     for uploaded_file in uploaded_files:
+        st_status.update(label=f"Extracting text from {uploaded_file.name}...")
         # Convert bytes to an image
         image = Image.open(uploaded_file)
         # Remove EXIF from image

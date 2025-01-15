@@ -22,7 +22,3 @@ st.session_state["openai_api_key"] = st.text_input("OpenAI API Key", openai_api_
 # DeepSeek API Key
 deepseek_api_key = st.session_state.get("deepseek_api_key", "")
 st.session_state["deepseek_api_key"] = st.text_input("DeepSeek API Key", deepseek_api_key, type="password")
-
-# pdflatex binary
-pdflatex_location = st.session_state.get("pdflatex_location", "")
-st.session_state["pdflatex_location"] = st.text_input("pdflatex binary location", pdflatex_location)
