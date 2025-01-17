@@ -8,12 +8,16 @@ curr_ocr_engine_idx = ocr_engine_options.index(curr_ocr_engine) if curr_ocr_engi
 st.session_state["ocr_engine"] = st.selectbox("OCR Engine", ["EasyOCR", "OpenAI Vision"], curr_ocr_engine_idx)
 
 # LLM Model Selection
-llm_model_options = ["deepseek-chat", "gpt-4o", "gpt-4o-mini", "o1", "o1-mini"]
+llm_model_options = ["deepseek-chat", "gpt-4o", "gpt-4o-mini"]
 if st.session_state["ocr_engine"] == "OpenAI Vision":
     llm_model_options.pop(0) # remove deepseek-chat
 curr_llm_model = st.session_state.get("llm_model", "deepseek-chat")
 curr_llm_model_idx = llm_model_options.index(curr_llm_model) if curr_llm_model in llm_model_options else 0
 st.session_state["llm_model"] = st.selectbox("LLM Model", llm_model_options, curr_llm_model_idx)
+
+# Temperature
+temperature = st.session_state.get("temperature", 0.1)
+st.session_state["temperature"] = st.slider("Temperature", 0.0, 1.0, temperature, 0.1)
 
 # OpenAI API Key
 openai_api_key = st.session_state.get("openai_api_key", "")

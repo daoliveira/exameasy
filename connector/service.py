@@ -7,10 +7,10 @@ from langchain_core.prompts import PromptTemplate
 
 def get_llm(model: str):
     if "deepseek" in model:
-        llm = ChatOpenAI(temperature=0.1, model_name=model, openai_api_base="https://api.deepseek.com/v1",
+        llm = ChatOpenAI(temperature=st.session_state.temperature, model_name=model, openai_api_base="https://api.deepseek.com/v1",
                          openai_api_key=st.session_state.deepseek_api_key)
     else:
-        llm = ChatOpenAI(temperature=0.1, model_name=model, openai_api_key=st.session_state.openai_api_key)
+        llm = ChatOpenAI(temperature=st.session_state.temperature, model_name=model, openai_api_key=st.session_state.openai_api_key)
     return llm
 
 
@@ -44,8 +44,14 @@ def generate_mock_exam(content, model, n_questions, mood, school_year):
 
     res = llm.invoke([message])
 
-    # Remove lines starting with three backticks
-    result = re.sub(r'^```.*$', '', res.content, flags=re.MULTILINE)
+    # check if res has attribute content
+    if hasattr(res, 'content'):
+        res = res.content
+    else:
+        res = res
+
+    # Remove lines starting with three backticks (sometimes OpenAI generate these)
+    result = re.sub(r'^```.*$', '', res, flags=re.MULTILINE)
 
     return result
 

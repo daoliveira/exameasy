@@ -39,7 +39,8 @@ if curr_ocr_engine == "EasyOCR":
         index=26,
         help="EasyOCR requires knowledge of the language of the text to be recognized.")
 
-st.caption(f"**OCR engine:** {curr_ocr_engine}  |  **LLM:** {curr_llm_model}", help="You can change these in settings")
+st.caption(f"**OCR engine:** {curr_ocr_engine}  |  **LLM:** {curr_llm_model}  |  **Temperature:** {st.session_state.temperature}",
+           help="You can change these in settings")
 
 if st.button("Generate"):
     # Add a streamlit status gadget

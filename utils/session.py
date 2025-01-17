@@ -11,6 +11,9 @@ def init_session():
     if "llm_model" not in st.session_state:
         st.session_state.llm_model = "deepseek-chat"
 
+    if "temperature" not in st.session_state:
+        st.session_state.temperature = 0.1
+
     if "openai_api_key" not in st.session_state:
         st.session_state.openai_api_key = os.getenv("OPENAI_API_KEY")
 
