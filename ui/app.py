@@ -23,7 +23,7 @@ st.markdown("""
 n_questions = st.slider("Number of questions", 1, 20, 10)
 col = st.columns(2)
 mood = col[0].selectbox("Mood", MOOD_LIST, index=1)
-school_year = col[1].selectbox("School year", SCHOOL_YEAR_LIST, index=4)
+school_year = col[1].selectbox("School year", SCHOOL_YEAR_LIST, index=5)
 
 uploaded_files = st.file_uploader("Content to review", type=['jpg', 'jpeg'], accept_multiple_files=True)
 
