@@ -1,9 +1,12 @@
+import torch
 import streamlit as st
 from connector import service
 from utils import image as img_utils
 from utils import session as session_utils
 from utils import latex as latex_utils
 from utils.easyocr import EASYOCR_LANG_MAP, get_lang_name
+
+torch.classes.__path__ = []
 
 st.set_page_config(page_title="ExamEasy!")
 st.title('ExamEasy!')
@@ -23,9 +26,9 @@ st.markdown("""
 n_questions = st.slider("Number of questions", 1, 20, 10)
 col = st.columns(2)
 mood = col[0].selectbox("Mood", MOOD_LIST, index=1)
-school_year = col[1].selectbox("School year", SCHOOL_YEAR_LIST, index=5)
+school_year = col[1].selectbox("School year", SCHOOL_YEAR_LIST, index=6)
 
-uploaded_files = st.file_uploader("Content to review", type=['jpg', 'jpeg'], accept_multiple_files=True)
+uploaded_files = st.file_uploader("Content to review", type=['jpg', 'jpeg', 'png', 'gif', 'webp'], accept_multiple_files=True)
 
 curr_ocr_engine = st.session_state.get("ocr_engine")
 curr_llm_model = st.session_state.get("llm_model")
@@ -55,6 +58,16 @@ if st.button("Generate"):
     else:
         st_status.update(label="Calling LLM to generate mock exam...")
         image_bytes = img_utils.uploaded_img_to_img_bytes(uploaded_files)
+        if "deepseek" in curr_llm_model:
+            payload_bytes = img_utils.vision_payload_size(image_bytes)
+            if payload_bytes > img_utils.DEEPSEEK_MAX_REQUEST_BYTES:
+                st_status.update(label="Request too large for DeepSeek.", state="error")
+                st.error(
+                    f"The uploaded images add up to {payload_bytes / 1024 / 1024:.1f} MiB, which exceeds "
+                    f"DeepSeek's {img_utils.DEEPSEEK_MAX_REQUEST_BYTES // (1024 * 1024)} MiB request limit. "
+                    "Please remove some images and try again."
+                )
+                st.stop()
         latex = service.generate_mock_exam_from_images(image_bytes, curr_llm_model, n_questions, mood, school_year)
 
     # Convert TeX string to PDF bytes

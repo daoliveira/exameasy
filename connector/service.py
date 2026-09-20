@@ -2,6 +2,7 @@ from langchain_core.messages import HumanMessage
 import re
 import streamlit as st
 from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 
 
@@ -9,6 +10,9 @@ def get_llm(model: str):
     if "deepseek" in model:
         llm = ChatOpenAI(temperature=st.session_state.temperature, model_name=model, openai_api_base="https://api.deepseek.com/v1",
                          openai_api_key=st.session_state.deepseek_api_key)
+    elif "gemini" in model:
+        llm = ChatGoogleGenerativeAI(temperature=st.session_state.temperature, model=model, 
+                                    google_api_key=st.session_state.google_api_key)
     else:
         llm = ChatOpenAI(temperature=st.session_state.temperature, model_name=model, openai_api_key=st.session_state.openai_api_key)
     return llm

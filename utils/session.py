@@ -9,7 +9,7 @@ def init_session():
         st.session_state.ocr_engine = "EasyOCR"
 
     if "llm_model" not in st.session_state:
-        st.session_state.llm_model = "deepseek-chat"
+        st.session_state.llm_model = "deepseek-flash"
 
     if "temperature" not in st.session_state:
         st.session_state.temperature = 0.1
@@ -19,3 +19,6 @@ def init_session():
 
     if "deepseek_api_key" not in st.session_state:
         st.session_state.deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
+
+    if "google_api_key" not in st.session_state:
+        st.session_state.google_api_key = os.getenv("GOOGLE_API_KEY")
