@@ -1,5 +1,7 @@
 from langchain_core.messages import HumanMessage
 import re
+import sys
+import time
 import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -46,7 +48,9 @@ def generate_mock_exam(content, model, n_questions, mood, school_year):
 
     llm = get_llm(model)
 
+    t_start = time.perf_counter()
     res = llm.invoke([message])
+    print(f"[llm] {model} invoke took {time.perf_counter() - t_start:.1f}s", file=sys.stderr, flush=True)
 
     # check if res has attribute content
     if hasattr(res, 'content'):

@@ -1,4 +1,6 @@
 import base64
+import sys
+import time
 import easyocr
 from PIL import Image, ImageOps
 from io import BytesIO
@@ -60,11 +62,19 @@ def uploaded_img_to_img_bytes(uploaded_files):
     return img_bytes
 
 
+def _log(msg):
+    print(f"[ocr] {msg}", file=sys.stderr, flush=True)
+
+
 def uploaded_img_to_text(st_status, uploaded_files, lang = "en"):
     text = ""
+    t_start = time.perf_counter()
+    _log(f"start: {len(uploaded_files)} image(s), lang={lang}")
     reader = easyocr.Reader([lang])
-    for uploaded_file in uploaded_files:
+    _log(f"reader ready in {time.perf_counter() - t_start:.1f}s")
+    for i, uploaded_file in enumerate(uploaded_files, 1):
         st_status.update(label=f"Extracting text from {uploaded_file.name}...")
+        t_img = time.perf_counter()
         # Convert bytes to an image
         image = Image.open(uploaded_file)
         # Remove EXIF from image
@@ -89,4 +99,6 @@ def uploaded_img_to_text(st_status, uploaded_files, lang = "en"):
         text += page
         # Adding page separator
         text += "\n---\n"
+        _log(f"image {i}/{len(uploaded_files)} {uploaded_file.name}: {time.perf_counter() - t_img:.1f}s ({width}x{height}, {len(result)} regions)")
+    _log(f"done: total {time.perf_counter() - t_start:.1f}s, {len(text)} chars")
     return text

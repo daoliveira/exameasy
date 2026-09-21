@@ -1,3 +1,5 @@
+import sys
+import traceback
 import torch
 import streamlit as st
 from connector import service
@@ -46,6 +48,7 @@ st.caption(f"**OCR engine:** {curr_ocr_engine}  |  **LLM:** {curr_llm_model}  | 
            help="You can change these in settings")
 
 if st.button("Generate"):
+    print(f"[app] generate requested: ocr={curr_ocr_engine} model={curr_llm_model} images={len(uploaded_files)}", file=sys.stderr, flush=True)
     # Add a streamlit status gadget
     st_status = st.status("Generating mock exam...")
 
@@ -76,6 +79,8 @@ if st.button("Generate"):
         pdf_bytes = latex_utils.latex_to_pdf(latex)
         st_status.update(label="PDF generated!", state="complete")
     except Exception as e:
+        print(f"[app] PDF generation error: {type(e).__name__}: {e}", file=sys.stderr, flush=True)
+        traceback.print_exc()
         st_status.update(label="Error generating the PDF. Try fixing the LaTeX file manually or click Generate again.", state="error")
         pdf_bytes = None
 
